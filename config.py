@@ -63,7 +63,7 @@ class Config:
     API_HASH = os.environ.get("API_HASH", "")
     CHAT_ID = int(os.environ.get("CHAT_ID", ""))
     BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
-    SESSION = os.environ.get("SESSION_STRING", "AQHHmYoANAQ0oGgUysnKzoDfDErVAX3Vf86WRutZxOSP9IBFjIbYK9Ebwv0ta3sc1TRtOTZfsqkMXQ6uiUP4-LYj46nowP8co0pp6QizRyBTYMMc-nlG70y8Zzj7bSJmsjMZXPdc3ib5qtBRAMmAS4grsb_pQ8iytWfIg9BgyySp_neEtZ31DOd4OyLVzZeZzk9lRZ14zKFzxpfJ5EG5kFPFCDBJqCO7xxVWYUKuOOcQW77dnyFJIwFD9lPOq7f3J54aQWESwa0oemQttFq6OQ2mgyr316rMdfB_NrCHptPtaKAzAxYrlxX2SJbcjNNU2HvIbbmtV14_ZlxO1fYBQMSL6CP9DwAAAAGXudBfAA")
+    SESSION = os.environ.get("SESSION_STRING", "")
 
     # Optional Variables
     STREAM_URL=finalurl
