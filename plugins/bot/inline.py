@@ -66,22 +66,17 @@ async def search(client, query):
         )
     else:
         videosSearch = VideosSearch(string.lower(), limit=50)
-        for v in videosSearch.result()["result"]:
-            answers.append(
-                InlineQueryResultArticle(
-                    title=v["title"],
-                    description=("Duration: {} Views: {}").format(
-                        v["duration"],
-                        v["viewCount"]["short"]
-                    ),
-                    input_message_content=InputTextMessageContent(
-                        "/play https://www.youtube.com/watch?v={}".format(
-                            v["id"]
-                        )
-                    ),
-                    thumb_url=v["thumbnails"][0]["url"]
-                )
+        answers.extend(
+            InlineQueryResultArticle(
+                title=v["title"],
+                description=f'Duration: {v["duration"]} Views: {v["viewCount"]["short"]}',
+                input_message_content=InputTextMessageContent(
+                    f'/play https://www.youtube.com/watch?v={v["id"]}'
+                ),
+                thumb_url=v["thumbnails"][0]["url"],
             )
+            for v in videosSearch.result()["result"]
+        )
         try:
             await query.answer(
                 results=answers,

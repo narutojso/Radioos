@@ -35,8 +35,7 @@ async def nopm(client, message):
             result_id=inline.results[0].id,
             hide_via=True
             )
-        old=msg.get(message.chat.id)
-        if old:
+        if old := msg.get(message.chat.id):
             await client.delete_messages(message.chat.id, [old["msg"], old["s"]])
         msg[message.chat.id]={"msg":m.updates[1].message.id, "s":message.message_id}
     except BotInlineDisabled:
@@ -44,4 +43,3 @@ async def nopm(client, message):
             await message.reply_text(f"{REPLY_MESSAGE}\n\n<b>© Powered By : \n@AsmSafone | @AsmSupport 👑</b>")
     except Exception as e:
         print(e)
-        pass

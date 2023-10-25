@@ -54,7 +54,6 @@ async def main():
             pass
         except Exception as e:
             print(e)
-            pass
 
 def stop_and_restart():
     bot.stop()
@@ -168,15 +167,13 @@ async def restart(_, message: Message):
         Config.HEROKU_APP.restart()
     else:
         await k.edit("🔄 **Restarting, Please Wait...**")
-        process = FFMPEG_PROCESSES.get(CHAT_ID)
-        if process:
+        if process := FFMPEG_PROCESSES.get(CHAT_ID):
             try:
                 process.send_signal(SIGINT)
             except subprocess.TimeoutExpired:
                 process.kill()
             except Exception as e:
                 print(e)
-                pass
             FFMPEG_PROCESSES[CHAT_ID] = ""
         Thread(
             target=stop_and_restart()
