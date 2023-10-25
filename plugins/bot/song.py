@@ -43,9 +43,7 @@ def time_to_seconds(time):
 
 @Client.on_message(filters.command(["song", f"song@{USERNAME}"]) & (filters.chat(CHAT_ID) | filters.private | filters.chat(LOG_GROUP)))
 async def song(_, message: Message):
-    query = ''
-    for i in message.command[1:]:
-        query += ' ' + str(i)
+    query = ''.join(f' {str(i)}' for i in message.command[1:])
     print(query)
     k=await message.reply_text("🔍 **Searching Song...**")
     ydl_opts = {
@@ -57,7 +55,7 @@ async def song(_, message: Message):
     try:
         results = []
         count = 0
-        while len(results) == 0 and count < 6:
+        while not results and count < 6:
             if count > 0:
                 await time.sleep(1)
             results = YoutubeSearch(query, max_results=1).to_dict()
@@ -76,7 +74,7 @@ async def song(_, message: Message):
             #     m.edit("Exceeded 30mins cap")
             #     return
 
-            performer = f"[ꜱᴀꜰᴏɴᴇ ᴍᴜꜱɪᴄ]" 
+            performer = "[ꜱᴀꜰᴏɴᴇ ᴍᴜꜱɪᴄ]"
             thumb_name = f'thumb{message.message_id}.jpg'
             thumb = requests.get(thumbnail, allow_redirects=True)
             open(thumb_name, 'wb').write(thumb.content)
@@ -89,7 +87,7 @@ async def song(_, message: Message):
         await k.edit(
             "❗ **Enter An Song Name!** \nFor Example: `/song Alone Marshmellow`"
         )
-        print(str(e))
+        print(e)
         return
     await k.edit("📥 **Downloading Song...**")
     try:
@@ -109,10 +107,8 @@ async def song(_, message: Message):
     except Exception as e:
         await k.edit(f'❌ **An Error Occured!** \n\nError:- {e}')
         print(e)
-        pass
     try:
         os.remove(audio_file)
         os.remove(thumb_name)
     except Exception as e:
         print(e)
-        pass

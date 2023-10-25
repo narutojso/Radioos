@@ -130,13 +130,9 @@ class MusicPlayer(object):
         group_call = self.group_call
         client = group_call.client
         chat_id = LOG_GROUP
-        message = await bot.send_message(
-            chat_id,
-            text,
-            disable_web_page_preview=True,
-            disable_notification=True
+        return await bot.send_message(
+            chat_id, text, disable_web_page_preview=True, disable_notification=True
         )
-        return message
 
 
     async def download_audio(self, song):
@@ -180,7 +176,7 @@ class MusicPlayer(object):
     async def start_radio(self):
         group_call = self.group_call
         if group_call.is_connected:
-            playlist.clear()   
+            playlist.clear()
         process = FFMPEG_PROCESSES.get(CHAT_ID)
         if process:
             try:
@@ -189,7 +185,6 @@ class MusicPlayer(object):
                 process.kill()
             except Exception as e:
                 print(e)
-                pass
             FFMPEG_PROCESSES[CHAT_ID] = ""
         station_stream_url = STREAM_URL
         try:
@@ -235,9 +230,8 @@ class MusicPlayer(object):
 
 
     async def stop_radio(self):
-        group_call = self.group_call
-        if group_call:
-            playlist.clear()   
+        if group_call := self.group_call:
+            playlist.clear()
             group_call.input_filename = ''
             try:
                 RADIO.remove(1)
@@ -247,15 +241,13 @@ class MusicPlayer(object):
                 RADIO.add(0)
             except:
                 pass
-        process = FFMPEG_PROCESSES.get(CHAT_ID)
-        if process:
+        if process := FFMPEG_PROCESSES.get(CHAT_ID):
             try:
                 process.send_signal(SIGINT)
             except subprocess.TimeoutExpired:
                 process.kill()
             except Exception as e:
                 print(e)
-                pass
             FFMPEG_PROCESSES[CHAT_ID] = ""
 
 
@@ -277,10 +269,8 @@ class MusicPlayer(object):
                 await group_call.start(CHAT_ID)
             except Exception as e:
                 print(e)
-                pass
         except Exception as e:
             print(e)
-            pass
 
 
     async def edit_title(self):
@@ -295,7 +285,6 @@ class MusicPlayer(object):
             await self.group_call.client.send(edit)
         except Exception as e:
             print("Error Occured On Changing VC Title:", e)
-            pass
 
 
     async def delete(self, message):
@@ -317,7 +306,6 @@ class MusicPlayer(object):
                     admins.append(administrator.user.id)
             except Exception as e:
                 print(e)
-                pass
             ADMIN_LIST[chat]=admins
 
         return admins
@@ -331,10 +319,7 @@ mp = MusicPlayer()
 @mp.group_call.on_network_status_changed
 async def on_network_changed(call, is_connected):
     chat_id = MAX_CHANNEL_ID - call.full_chat.id
-    if is_connected:
-        CALL_STATUS[chat_id] = True
-    else:
-        CALL_STATUS[chat_id] = False
+    CALL_STATUS[chat_id] = bool(is_connected)
 
 @mp.group_call.on_playout_ended
 async def playout_ended_handler(_, __):
